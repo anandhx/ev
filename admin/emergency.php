@@ -160,6 +160,7 @@ $emergency_vehicles = $vehicleManager->getAvailableVehicles();
             <a href="users.php" class="nav-link"><i class="fas fa-users"></i>Users</a>
             <a href="payments.php" class="nav-link"><i class="fas fa-credit-card"></i>Payments</a>
             <a href="emergency.php" class="nav-link active"><i class="fas fa-exclamation-triangle"></i>Emergency</a>
+            <a href="spares.php" class="nav-link"><i class="fas fa-cogs"></i>Spares</a>
             <a href="../logout.php" class="nav-link text-danger"><i class="fas fa-sign-out-alt"></i>Logout</a>
         </nav>
     </div>

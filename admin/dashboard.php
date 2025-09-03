@@ -161,6 +161,7 @@ $current_page = 'dashboard';
                         <a href="emergency.php" class="nav-link">
                             <i class="fas fa-exclamation-triangle"></i>Emergency
                         </a>
+                        <a href="spares.php" class="nav-link"><i class="fas fa-cogs"></i>Spares</a>
                         <a href="../logout.php" class="nav-link text-danger">
                             <i class="fas fa-sign-out-alt"></i>Logout
                         </a>

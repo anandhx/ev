@@ -94,6 +94,13 @@ try {
 			echo '<div class="ok">+ Added technicians.password</div>';
 		} else { echo '<div class="muted">= technicians.password exists</div>'; }
 
+		// Spare orders: ensure updated_at exists
+		$colUpd = $pdo->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='" . str_replace("'","''", $dbName) . "' AND TABLE_NAME='spare_orders' AND COLUMN_NAME='updated_at'");
+		if ($colUpd && $colUpd->rowCount() === 0) {
+			$pdo->exec("ALTER TABLE spare_orders ADD COLUMN updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at");
+			echo '<div class="ok">+ Added spare_orders.updated_at</div>';
+		} else { echo '<div class="muted">= spare_orders.updated_at exists</div>'; }
+
 		// Ensure spare parts tables exist (in case schema execution was partial)
 		$stmt = $pdo->query("SHOW TABLES LIKE 'spare_part_requests'");
 		if ($stmt->rowCount() === 0) {
@@ -133,6 +140,7 @@ try {
 				shipping_postal VARCHAR(20) NOT NULL,
 				status ENUM('pending','paid','processing','shipped','delivered','cancelled') DEFAULT 'pending',
 				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				INDEX idx_so_req (request_id),
 				INDEX idx_so_user (user_id),
 				CONSTRAINT fk_so_request FOREIGN KEY (request_id) REFERENCES spare_part_requests(id) ON DELETE CASCADE ON UPDATE CASCADE,

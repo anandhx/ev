@@ -204,6 +204,7 @@ CREATE TABLE IF NOT EXISTS spare_orders (
     shipping_postal VARCHAR(20) NOT NULL,
     status ENUM('pending','paid','processing','shipped','delivered','cancelled') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_so_req (request_id),
     INDEX idx_so_user (user_id),
     CONSTRAINT fk_so_request FOREIGN KEY (request_id) REFERENCES spare_part_requests(id) ON DELETE CASCADE ON UPDATE CASCADE,

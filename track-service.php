@@ -233,10 +233,7 @@ if (!$error) {
         </div>
 
         <?php if (isset($error)): ?>
-            <div class="tracking-card" style="background:#fde8ea;border:1px solid #f8c7cd;">
-                <h3 style="color:#8a2530;"><i class="fas fa-exclamation-triangle"></i> <?php echo htmlspecialchars($error); ?></h3>
-                <p>Please select a service request to track.</p>
-            </div>
+         
 
             <?php
             // Load user's requests for selection with simple filters
