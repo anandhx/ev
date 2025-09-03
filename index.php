@@ -133,6 +133,34 @@
         .carousel-item > img { object-fit: cover; height: calc(100vh - 64px); }
         .carousel .btn { position: relative; z-index: 2; }
     </style>
+<!-- additional styles for gallery and image strips -->
+<style>
+    .image-gallery { padding: 5rem 2rem; }
+    .image-gallery .container { max-width: 1400px; }
+    .masonry {
+        column-count: 4;
+        column-gap: 1rem;
+    }
+    .masonry-item { break-inside: avoid; margin-bottom: 1rem; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 10px 28px rgba(0,0,0,0.25); background: var(--card); }
+    .masonry-item img { width: 100%; height: auto; display: block; }
+    .masonry-item .caption { padding: 0.75rem 1rem; color: var(--muted); font-size: 0.95rem; }
+
+    @media (max-width: 1200px) { .masonry { column-count: 3; } }
+    @media (max-width: 900px) { .masonry { column-count: 2; } }
+    @media (max-width: 600px) { .masonry { column-count: 1; } }
+
+    .image-strips { padding: 0; }
+    .strip { position: relative; min-height: 70vh; display: grid; grid-template-columns: 1.2fr 1fr; gap: 0; align-items: center; }
+    .strip.reverse { grid-template-columns: 1fr 1.2fr; }
+    .strip-image { position: relative; height: 100%; }
+    .strip-image::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)); z-index: 1; }
+    .strip-image > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .strip-content { padding: 3rem; z-index: 2; }
+    .strip h3 { font-size: 2rem; margin-bottom: 0.75rem; }
+    .strip p { color: var(--muted); max-width: 640px; }
+
+    .spacer { height: 80px; }
+    </style>
 </head>
 <body>
     <header class="header" id="header">
@@ -163,18 +191,18 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active position-relative">
-                    <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=2000&q=80" class="d-block w-100" alt="EV Charging">
+                    <img src="assets/img/hyundai-motor-group-a3vDd8hzuYs-unsplash.jpg" class="d-block w-100" alt="EV Charging">
                     <div class="carousel-caption">
                         <h1 class="mb-3">On-Demand EV Charging</h1>
                         <p class="mb-4">Fast mobile chargers dispatched to your exact location.</p>
-                        <div class="cta-buttons">
-                            <a href="signup.php" class="btn btn-primary">Get Started</a>
+            <div class="cta-buttons">
+                <a href="signup.php" class="btn btn-primary">Get Started</a>
                             <a href="#services" class="btn btn-secondary">Explore Services</a>
                         </div>
                     </div>
                 </div>
                 <div class="carousel-item position-relative">
-                    <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&w=2000&q=80" class="d-block w-100" alt="Roadside Assistance">
+                    <img src="assets/img/chuttersnap-xJLsHl0hIik-unsplash.jpg" class="d-block w-100" alt="Roadside Assistance">
                     <div class="carousel-caption">
                         <h1 class="mb-3">Emergency Roadside Support</h1>
                         <p class="mb-4">Technicians available 24/7 for quick assistance.</p>
@@ -185,7 +213,7 @@
                     </div>
                 </div>
                 <div class="carousel-item position-relative">
-                    <img src="https://images.unsplash.com/photo-1606549502658-9d6a5b31b46a?auto=format&fit=crop&w=2000&q=80" class="d-block w-100" alt="Tracking">
+                    <img src="assets/img/chargex-nIrW3S5whYI-unsplash.jpg" class="d-block w-100" alt="Tracking">
                     <div class="carousel-caption">
                         <h1 class="mb-3">Live Tracking & ETA</h1>
                         <p class="mb-4">Track your service vehicle's real-time arrival.</p>
@@ -360,6 +388,79 @@
         </div>
     </section>
 
+    <div class="wave"></div>
+
+    <!-- Visual Stories Strips -->
+    <section class="image-strips parallax">
+        <div class="strip">
+            <div class="strip-image"><img src="assets/img/kelvin-zyteng-gurXmXXD9fI-unsplash.jpg" alt="EV Night City"></div>
+            <div class="strip-content">
+                <h3 class="reveal">Powering Every Journey</h3>
+                <p class="reveal">From urban nights to long highway rides, our mobile charging and on-road assistance keep you moving without worry.</p>
+                <div class="spacer"></div>
+            </div>
+        </div>
+        <div class="strip reverse">
+            <div class="strip-content">
+                <h3 class="reveal">Precision. Safety. Care.</h3>
+                <p class="reveal">Expert technicians and well-equipped service vehicles deliver safe and precise support at your location.</p>
+                <div class="spacer"></div>
+            </div>
+            <div class="strip-image"><img src="assets/img/marek-studzinski-JmQlTYR1MdE-unsplash.jpg" alt="Highway Support"></div>
+        </div>
+        <div class="strip">
+            <div class="strip-image"><img src="assets/img/zaptec-29DrYtc7fp8-unsplash.jpg" alt="Modern Charging"></div>
+            <div class="strip-content">
+                <h3 class="reveal">Modern Charging, Anywhere</h3>
+                <p class="reveal">Fast, reliable charging solutions designed for today’s EVs, available when and where you need them most.</p>
+                <div class="spacer"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="wave"></div>
+
+    <!-- Inspiration Gallery (uses all images) -->
+    <section class="image-gallery">
+        <div class="container">
+            <h2 class="section-title reveal">Inspiration Gallery</h2>
+            <div class="masonry" id="gallery">
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/hyundai-motor-group-a3vDd8hzuYs-unsplash.jpg" alt="Hyundai EV"><div class="caption">Hyundai EV energy</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/chuttersnap-xJLsHl0hIik-unsplash.jpg" alt="City Charge"><div class="caption">City charge lanes</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/chargex-nIrW3S5whYI-unsplash.jpg" alt="Charger"><div class="caption">Charger in detail</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/stephen-mease-5hbzWe6ens4-unsplash.jpg" alt="EV Concept"><div class="caption">Conceptual motion</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/yrka-pictured-OWWnwU0cVnI-unsplash.jpg" alt="EV Studio"><div class="caption">Studio design lines</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/juice-YX-BmnafcJE-unsplash.jpg" alt="Juice A"><div class="caption">Charge ready</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/juice-wpYb8d1Nha4-unsplash.jpg" alt="Juice B"><div class="caption">Power flow</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/kelvin-zyteng-gurXmXXD9fI-unsplash.jpg" alt="Night Drive"><div class="caption">Night drive</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/marek-studzinski-JmQlTYR1MdE-unsplash.jpg" alt="Open Road"><div class="caption">Open road horizons</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/zaptec-29DrYtc7fp8-unsplash.jpg" alt="Zaptec"><div class="caption">Zaptec charging</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/bernd-dittrich-8G-HjG0nVI8-unsplash.jpg" alt="Workshop"><div class="caption">Workshop precision</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/mark-chan-h6CADbJ-QCk-unsplash.jpg" alt="City EV"><div class="caption">City reflections</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/rick-govic-rLTjEVGXNBA-unsplash.jpg" alt="EV Detail"><div class="caption">Detail and design</div></div>
+                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/christopher-lee-u6ey4gn_10M-unsplash.jpg" alt="EV Landscape"><div class="caption">Landscape charge</div></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="wave"></div>
+
+    <!-- Wide Feature Banner using remaining images -->
+    <section class="parallax" style="padding: 0;">
+        <div style="position:relative; height: 60vh; overflow:hidden;">
+            <img src="assets/img/rick-govic-rLTjEVGXNBA-unsplash.jpg" alt="Design Lines" style="width:100%; height:100%; object-fit:cover; filter: saturate(1.05);">
+        </div>
+        <div style="position:relative; height: 60vh; overflow:hidden;">
+            <img src="assets/img/mark-chan-h6CADbJ-QCk-unsplash.jpg" alt="Urban EV" style="width:100%; height:100%; object-fit:cover;">
+        </div>
+        <div style="position:relative; height: 60vh; overflow:hidden;">
+            <img src="assets/img/bernd-dittrich-8G-HjG0nVI8-unsplash.jpg" alt="Service Care" style="width:100%; height:100%; object-fit:cover;">
+        </div>
+        <div style="position:relative; height: 60vh; overflow:hidden;">
+            <img src="assets/img/christopher-lee-u6ey4gn_10M-unsplash.jpg" alt="Road View" style="width:100%; height:100%; object-fit:cover;">
+        </div>
+    </section>
+
     <div id="toTop"><i class="fas fa-arrow-up"></i></div>
 
     <footer class="footer">
@@ -382,7 +483,7 @@
             anchor.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
                 if (href.length > 1) {
-                    e.preventDefault();
+                e.preventDefault();
                     const target = document.querySelector(href);
                     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
