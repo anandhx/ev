@@ -1,12 +1,33 @@
+<?php
+$imgDir = __DIR__ . '/assets/img';
+$imgBase = 'assets/img';
+$allImages = [];
+if (is_dir($imgDir)) {
+    foreach (scandir($imgDir) as $f) {
+        if (preg_match('/\.(jpe?g|png|webp)$/i', $f)) {
+            $allImages[] = $imgBase . '/' . $f;
+        }
+    }
+}
+if (empty($allImages)) {
+    $allImages = [$imgBase . '/hyundai-motor-group-a3vDd8hzuYs-unsplash.jpg'];
+}
+$heroImage = $allImages[array_rand($allImages)];
+// Randomize order for gallery use
+$galleryImages = $allImages;
+shuffle($galleryImages);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EV Mobile Power & Service Station - Smart Support for Stranded EVs</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -14,339 +35,980 @@
         }
 
         :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --accent: #ffd700;
-            --bg: #0e0f12;
-            --card: rgba(255,255,255,0.06);
-            --border: rgba(255,255,255,0.12);
-            --text: #e9edf1;
-            --muted: #9aa3ae;
+            --primary: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --secondary: #8b5cf6;
+            --accent: #06d6a0;
+            --accent-glow: rgba(6, 214, 160, 0.4);
+            --bg: #0a0b0d;
+            --bg-secondary: #0f1114;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-hover: rgba(255, 255, 255, 0.12);
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.15);
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            --glow: 0 0 20px;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
             color: var(--text);
             background: var(--bg);
+            overflow-x: hidden;
         }
 
+        /* Advanced Background Effects */
         body::before {
             content: '';
             position: fixed;
-            inset: -20% -20% auto -20%;
-            height: 120vh;
-            background: radial-gradient(40% 40% at 20% 10%, rgba(102,126,234,0.22) 0%, rgba(102,126,234,0) 70%),
-                        radial-gradient(40% 40% at 80% 0%, rgba(118,75,162,0.22) 0%, rgba(118,75,162,0) 70%);
-            filter: blur(40px);
-            z-index: -1;
-            animation: drift 28s ease-in-out infinite alternate;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 15%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 30%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 40% 70%, rgba(6, 214, 160, 0.1) 0%, transparent 50%);
+            animation: etherealMove 30s ease-in-out infinite alternate;
+            z-index: -2;
         }
-        @keyframes drift { 0% { transform: translateY(-4%) translateX(0); } 100% { transform: translateY(4%) translateX(-2%); } }
 
-        .header {
-            background: rgba(20, 22, 28, 0.5);
-            -webkit-backdrop-filter: blur(14px) saturate(140%);
-            backdrop-filter: blur(14px) saturate(140%);
-            border-bottom: 1px solid var(--border);
-            color: var(--text);
-            padding: 0.75rem 0;
+        body::after {
+            content: '';
             position: fixed;
-            width: 100%;
+            inset: 0;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(59, 130, 246, 0.03) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(139, 92, 246, 0.03) 50%, transparent 70%);
+            animation: meshGradient 20s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes etherealMove {
+            0% { transform: translate(-5%, -5%) rotate(0deg); }
+            100% { transform: translate(5%, 5%) rotate(360deg); }
+        }
+
+        @keyframes meshGradient {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        /* Glass Morphism Header */
+        .header {
+            position: fixed;
             top: 0;
+            width: 100%;
             z-index: 1000;
-            transition: background 0.4s ease, box-shadow 0.3s ease;
+            padding: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .header.scrolled { box-shadow: 0 10px 30px rgba(0,0,0,0.25); background: rgba(20,22,28,0.85); }
 
-        .nav { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
-        .logo { font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
-        .nav-links a { color: var(--text); text-decoration: none; transition: color 0.3s; position: relative; font-weight: 500; }
-        .nav-links a::after { content: ''; position: absolute; left: 0; bottom: -6px; width: 0; height: 2px; background: var(--accent); transition: width 0.25s ease; }
-        .nav-links a:hover::after { width: 100%; }
-        .nav-links a:hover { color: var(--accent); }
+        .nav-container {
+            background: rgba(10, 11, 13, 0.4);
+            backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid var(--border);
+            border-radius: 0 0 24px 24px;
+            margin: 0 2rem;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-        .parallax { will-change: background-position; }
+        .header.scrolled .nav-container {
+            background: rgba(10, 11, 13, 0.8);
+            box-shadow: 0 32px 64px rgba(0, 0, 0, 0.4);
+            transform: translateY(0.5rem);
+        }
 
-        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; color: white; margin-top: 64px; position: relative; overflow: hidden; }
-        .hero-gradient { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(60% 60% at 50% 20%, rgba(102,126,234,0.25), rgba(0,0,0,0) 60%), radial-gradient(50% 50% at 85% 20%, rgba(118,75,162,0.25), rgba(0,0,0,0) 60%); filter: blur(10px); }
-        .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-        .btn { padding: 1rem 2rem; border: none; border-radius: 14px; text-decoration: none; font-weight: 700; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; display: inline-block; will-change: transform; }
-        .btn-primary { background: var(--accent); color: #14161c; box-shadow: 0 18px 36px rgba(255,215,0,0.28); }
-        .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 26px 54px rgba(255,215,0,0.35); }
-        .btn-secondary { background: transparent; color: var(--text); border: 2px solid var(--text); }
-        .btn-secondary:hover { background: var(--text); color: #14161c; transform: translateY(-3px) scale(1.02); }
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-        .features, .how-it-works, .services, .testimonials, .brands { padding: 5rem 2rem; position: relative; }
-        .features, .how-it-works { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); }
-        .services { background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.04)); }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
 
-        .container { max-width: 1200px; margin: 0 auto; }
-        .section-title { text-align: center; font-size: 2.3rem; margin-bottom: 3rem; color: var(--text); }
-        .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-        .reveal.in { opacity: 1; transform: translateY(0); }
+        .logo i {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.75rem;
+            filter: drop-shadow(0 0 10px var(--accent-glow));
+        }
 
-        .features-grid, .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-        .feature-card, .service-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; backdrop-filter: blur(6px); box-shadow: 0 18px 40px rgba(0,0,0,0.18); transition: transform 0.2s, box-shadow 0.2s; }
-        .feature-card { padding: 2rem; text-align: center; }
-        .feature-card:hover, .service-card:hover { transform: translateY(-10px); box-shadow: 0 28px 64px rgba(0,0,0,0.25); }
-        .tilt-card { will-change: transform; }
-        .feature-icon { font-size: 2.6rem; color: var(--primary); margin-bottom: 1rem; }
-        .feature-card h3 { font-size: 1.4rem; margin-bottom: 0.75rem; color: var(--text); }
-        .feature-card p { color: var(--muted); }
-        .service-image { height: 200px; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2.6rem; }
-        .service-content { padding: 2rem; }
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
 
-        .brands { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02)); padding: 3rem 2rem; }
-        .brand-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem; opacity: 0.8; filter: grayscale(100%); }
-        .brand { height: 40px; background: var(--card); border: 1px dashed var(--border); border-radius: 10px; display:flex; align-items:center; justify-content:center; color: var(--muted); font-weight: 600; }
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+        }
 
-        .testimonials { background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.03)); }
-        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
-        .testimonial { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; position: relative; }
-        .testimonial::before { content: '“'; position:absolute; top:-10px; left:12px; font-size: 3rem; color: var(--primary); opacity: 0.3; }
-        .author { display:flex; align-items:center; gap:0.75rem; margin-top: 1rem; color: var(--muted); font-size: 0.95rem; }
-        .author i { color: var(--primary); }
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
 
-        .wave { width: 100%; height: 60px; background: radial-gradient(60px 60px at 50% -10px, rgba(255,255,255,0.06) 0, transparent 70%); opacity: 0.6; }
+        .nav-links a:hover::before {
+            opacity: 0.1;
+        }
 
-        #toTop { position: fixed; right: 18px; bottom: 18px; width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; display:flex; align-items:center; justify-content:center; cursor: pointer; box-shadow: 0 12px 30px rgba(0,0,0,0.25); opacity: 0; visibility: hidden; transition: opacity 0.25s, transform 0.25s; }
-        #toTop.show { opacity: 1; visibility: visible; transform: translateY(-4px); }
+        .nav-links a:hover {
+            color: var(--accent);
+            transform: translateY(-2px);
+            text-shadow: var(--glow) var(--accent-glow);
+        }
 
-        .footer { background: #0b0c10; color: var(--muted); padding: 3rem 2rem; text-align: center; }
-        .footer-content { max-width: 1200px; margin: 0 auto; }
-        .social-links { display: flex; justify-content: center; gap: 1rem; margin: 1.25rem 0; }
-        .social-links a { color: var(--muted); font-size: 1.3rem; transition: color 0.3s; }
-        .social-links a:hover { color: var(--accent); }
+        /* Hero Section with 3D Elements */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 0;
+        }
 
+        .hero-3d-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.2), transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(139, 92, 246, 0.15), transparent 50%),
+                linear-gradient(135deg, transparent, rgba(6, 214, 160, 0.1));
+            animation: heroGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroGlow {
+            0% { opacity: 0.6; filter: blur(40px); }
+            100% { opacity: 0.9; filter: blur(60px); }
+        }
+
+        .floating-elements {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 15s linear infinite;
+            color: var(--accent);
+        }
+
+        .floating-icon:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { top: 60%; left: 85%; animation-delay: -5s; }
+        .floating-icon:nth-child(3) { top: 80%; left: 15%; animation-delay: -10s; }
+        .floating-icon:nth-child(4) { top: 30%; left: 70%; animation-delay: -3s; }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.2; }
+            90% { opacity: 0.1; }
+            100% { transform: translateY(-40px) rotate(360deg); opacity: 0; }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--accent);
+            animation: badgeGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes badgeGlow {
+            0% { box-shadow: 0 0 20px rgba(6, 214, 160, 0.2); }
+            100% { box-shadow: 0 0 40px rgba(6, 214, 160, 0.4); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        /* Advanced Button Styles */
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #00b894);
+            color: #0a0b0d;
+            box-shadow: 
+                0 20px 40px rgba(6, 214, 160, 0.3),
+                0 0 0 1px rgba(6, 214, 160, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 
+                0 32px 64px rgba(6, 214, 160, 0.4),
+                0 0 40px rgba(6, 214, 160, 0.6);
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            color: var(--text);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--card-hover);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+
+        /* Modern Card Styles */
+        .section {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text), var(--text-muted));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Advanced Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            background: var(--card-hover);
+            box-shadow: 
+                0 40px 80px rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(6, 214, 160, 0.2);
+        }
+
+        .feature-card:hover::before {
+            height: 3px;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .feature-icon::after {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: -1;
+        }
+
+        .feature-card:hover .feature-icon::after {
+            opacity: 1;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Service Cards with Enhanced Design */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .service-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 
+                0 50px 100px rgba(0, 0, 0, 0.4),
+                0 0 60px rgba(6, 214, 160, 0.3);
+        }
+
+        .service-image {
+            height: 240px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) skewX(-15deg); }
+            100% { transform: translateX(200%) skewX(-15deg); }
+        }
+
+        .service-content {
+            padding: 2.5rem;
+        }
+
+        .service-content h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .service-content ul {
+            margin-top: 1.5rem;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .service-content li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .service-content li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 0.8rem;
+        }
+
+        /* Brand Strip with Modern Design */
+        .brands {
+            padding: 4rem 2rem;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .brand-slider {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .brand-track {
+            display: flex;
+            gap: 3rem;
+            animation: brandScroll 25s linear infinite;
+        }
+
+        @keyframes brandScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .brand {
+            min-width: 200px;
+            height: 80px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .brand:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(6, 214, 160, 0.3);
+        }
+
+        /* Testimonials with Modern Cards */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .testimonial:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+
+        .testimonial::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 4rem;
+            color: var(--accent);
+            opacity: 0.3;
+            font-family: serif;
+        }
+
+        .testimonial p {
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .author i {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* Back to Top Button */
+        #toTop {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #00b894);
+            color: #0a0b0d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 
+                0 20px 40px rgba(6, 214, 160, 0.3),
+                0 0 0 1px rgba(6, 214, 160, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.2rem;
+        }
+
+        #toTop.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-8px);
+        }
+
+        #toTop:hover {
+            transform: translateY(-12px) scale(1.1);
+            box-shadow: 
+                0 30px 60px rgba(6, 214, 160, 0.4),
+                0 0 40px rgba(6, 214, 160, 0.6);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #0a0b0d, #0f1114);
+            color: var(--text-muted);
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .footer-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(6, 214, 160, 0.3);
+        }
+
+        /* Mobile Optimizations */
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero-content h1 { font-size: 2.3rem; }
-            .btn { width: 200px; }
-            .brand-row { grid-template-columns: repeat(3, 1fr); }
+            .nav-container {
+                margin: 0 1rem;
+                padding: 1rem 1.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content {
+                padding: 1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 280px;
+                justify-content: center;
+            }
+            
+            .section {
+                padding: 4rem 1rem;
+            }
+            
+            .features-grid,
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .brand-track {
+                gap: 2rem;
+            }
+            
+            #toTop {
+                right: 1rem;
+                bottom: 1rem;
+                width: 48px;
+                height: 48px;
+            }
         }
 
-        .carousel-caption { bottom: 22%; text-shadow: 0 4px 16px rgba(0,0,0,0.6); }
-        .carousel-caption h1 { font-size: 3rem; }
-        .carousel-item::after { content:''; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.45)); }
-        .carousel-item > img { object-fit: cover; height: calc(100vh - 64px); }
-        .carousel .btn { position: relative; z-index: 2; }
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
-<!-- additional styles for gallery and image strips -->
-<style>
-    .image-gallery { padding: 5rem 2rem; }
-    .image-gallery .container { max-width: 1400px; }
-    .masonry {
-        column-count: 4;
-        column-gap: 1rem;
-    }
-    .masonry-item { break-inside: avoid; margin-bottom: 1rem; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 10px 28px rgba(0,0,0,0.25); background: var(--card); }
-    .masonry-item img { width: 100%; height: auto; display: block; }
-    .masonry-item .caption { padding: 0.75rem 1rem; color: var(--muted); font-size: 0.95rem; }
-
-    @media (max-width: 1200px) { .masonry { column-count: 3; } }
-    @media (max-width: 900px) { .masonry { column-count: 2; } }
-    @media (max-width: 600px) { .masonry { column-count: 1; } }
-
-    .image-strips { padding: 0; }
-    .strip { position: relative; min-height: 70vh; display: grid; grid-template-columns: 1.2fr 1fr; gap: 0; align-items: center; }
-    .strip.reverse { grid-template-columns: 1fr 1.2fr; }
-    .strip-image { position: relative; height: 100%; }
-    .strip-image::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)); z-index: 1; }
-    .strip-image > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .strip-content { padding: 3rem; z-index: 2; }
-    .strip h3 { font-size: 2rem; margin-bottom: 0.75rem; }
-    .strip p { color: var(--muted); max-width: 640px; }
-
-    .spacer { height: 80px; }
+    <style>
+        /* Image Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+        .gallery-item {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--glass);
+            box-shadow: var(--shadow);
+            aspect-ratio: 4 / 3;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        /* Hero background photo layer */
+        .hero-photo { position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center; filter: saturate(1.05) contrast(1.05); opacity: 0.35; }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Advanced Header -->
     <header class="header" id="header">
-        <nav class="nav">
-            <div class="logo">
-                <i class="fas fa-bolt"></i>
-                EV Mobile Station
-            </div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="login.php">Login</a></li>
-                <li><a href="signup.php">Sign Up</a></li>
-            </ul>
-        </nav>
+        <div class="nav-container">
+            <nav class="nav">
+                <div class="logo">
+                    <i class="fas fa-bolt"></i>
+                    EV Mobile Station
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#testimonials">Reviews</a></li>
+                    <li><a href="login.php" class="btn btn-secondary" style="padding: 0.75rem 1.5rem; margin: 0;">Login</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <!-- Hero with Bootstrap Carousel -->
+    <!-- Revolutionary Hero Section -->
     <section id="home" class="hero">
-        <div class="hero-gradient"></div>
-        <div id="heroCarousel" class="carousel slide carousel-fade w-100" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <div class="hero-photo" style="background-image:url('<?php echo htmlspecialchars($heroImage, ENT_QUOTES); ?>');"></div>
+        <div class="hero-3d-bg"></div>
+        <div class="floating-elements">
+            <div class="floating-icon"><i class="fas fa-bolt"></i></div>
+            <div class="floating-icon"><i class="fas fa-charging-station"></i></div>
+            <div class="floating-icon"><i class="fas fa-car-battery"></i></div>
+            <div class="floating-icon"><i class="fas fa-route"></i></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-sparkles"></i>
+                Revolutionary EV Support Platform
             </div>
-            <div class="carousel-inner">
-                <div class="carousel-item active position-relative">
-                    <img src="assets/img/hyundai-motor-group-a3vDd8hzuYs-unsplash.jpg" class="d-block w-100" alt="EV Charging">
-                    <div class="carousel-caption">
-                        <h1 class="mb-3">On-Demand EV Charging</h1>
-                        <p class="mb-4">Fast mobile chargers dispatched to your exact location.</p>
+            
+            <h1>Power Up Your Journey<br>Anywhere, Anytime</h1>
+            
+            <p>Experience the future of electric vehicle support with our AI-powered mobile charging stations and emergency services. Get instant help when you need it most.</p>
+            
             <div class="cta-buttons">
-                <a href="signup.php" class="btn btn-primary">Get Started</a>
-                            <a href="#services" class="btn btn-secondary">Explore Services</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item position-relative">
-                    <img src="assets/img/chuttersnap-xJLsHl0hIik-unsplash.jpg" class="d-block w-100" alt="Roadside Assistance">
-                    <div class="carousel-caption">
-                        <h1 class="mb-3">Emergency Roadside Support</h1>
-                        <p class="mb-4">Technicians available 24/7 for quick assistance.</p>
-                        <div class="cta-buttons">
-                            <a href="request-service.php" class="btn btn-primary">Request Service</a>
-                            <a href="#how-it-works" class="btn btn-secondary">How It Works</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item position-relative">
-                    <img src="assets/img/chargex-nIrW3S5whYI-unsplash.jpg" class="d-block w-100" alt="Tracking">
-                    <div class="carousel-caption">
-                        <h1 class="mb-3">Live Tracking & ETA</h1>
-                        <p class="mb-4">Track your service vehicle's real-time arrival.</p>
-                        <div class="cta-buttons">
-                            <a href="login.php" class="btn btn-primary">Login</a>
-                            <a href="#features" class="btn btn-secondary">See Features</a>
-                        </div>
-                    </div>
-                </div>
+                <a href="signup.php" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    Start Your Journey
+                </a>
+                <a href="#services" class="btn btn-secondary">
+                    <i class="fas fa-play"></i>
+                    Watch Demo
+                </a>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
         </div>
     </section>
 
-    <div class="wave"></div>
-
-    <!-- Features Section -->
-    <section id="features" class="features parallax">
+    <!-- Advanced Features Section -->
+    <section id="features" class="section">
         <div class="container">
-            <h2 class="section-title reveal">Why Choose Our Service?</h2>
+            <h2 class="section-title reveal">Next-Gen EV Support</h2>
+            <p class="section-subtitle reveal">Cutting-edge technology meets unparalleled service quality</p>
+            
             <div class="features-grid">
-                <div class="feature-card tilt-card reveal">
+                <div class="feature-card reveal">
                     <div class="feature-icon"><i class="fas fa-bolt"></i></div>
-                    <h3>On-Demand Charging</h3>
-                    <p>Specialized mobile charging units arrive at your location with portable fast chargers to get you back on the road quickly.</p>
+                    <h3>AI-Powered Charging</h3>
+                    <p>Smart mobile charging units with AI optimization arrive at your location with ultra-fast charging capabilities and predictive battery analysis.</p>
                 </div>
-                <div class="feature-card tilt-card reveal">
-                    <div class="feature-icon"><i class="fas fa-tools"></i></div>
-                    <h3>Emergency Mechanical Support</h3>
-                    <p>Professional technicians provide on-site repairs, tire replacement, and diagnostics for all types of issues.</p>
+                
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                    <h3>Autonomous Dispatch</h3>
+                    <p>Advanced routing algorithms and real-time traffic analysis ensure the fastest possible response times with automated service deployment.</p>
                 </div>
-                <div class="feature-card tilt-card reveal">
+                
+                <div class="feature-card reveal">
                     <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
-                    <h3>Digital Platform</h3>
-                    <p>Easy-to-use website and mobile app for requesting help, sharing location, and tracking service vehicle arrival.</p>
+                    <h3>Immersive AR Interface</h3>
+                    <p>Next-generation mobile app with augmented reality features for service visualization and interactive troubleshooting guides.</p>
                 </div>
-                <div class="feature-card tilt-card reveal">
-                    <div class="feature-icon"><i class="fas fa-map-marker-alt"></i></div>
-                    <h3>Real-Time Tracking</h3>
-                    <p>Track your service vehicle in real-time and get accurate estimated arrival times for peace of mind.</p>
+                
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-satellite-dish"></i></div>
+                    <h3>IoT Integration</h3>
+                    <p>Seamless integration with your vehicle's IoT systems for proactive monitoring and predictive maintenance alerts.</p>
                 </div>
-                <div class="feature-card tilt-card reveal">
-                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>24/7 Support</h3>
-                    <p>Round-the-clock emergency support for EV owners stranded in remote areas or on highways.</p>
+                
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-shield-virus"></i></div>
+                    <h3>Quantum Security</h3>
+                    <p>Military-grade encryption and blockchain-secured payments with zero-trust security architecture for complete peace of mind.</p>
                 </div>
-                <div class="feature-card tilt-card reveal">
-                    <div class="feature-icon"><i class="fas fa-credit-card"></i></div>
-                    <h3>Secure Payments</h3>
-                    <p>Multiple payment options with secure transaction processing and transparent pricing.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="wave"></div>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="how-it-works parallax">
-        <div class="container">
-            <h2 class="section-title reveal">How It Works</h2>
-            <div class="steps">
-                <div class="step reveal">
-                    <div class="step-number">1</div>
-                    <h3>Request Help</h3>
-                    <p>Use our website or mobile app to request assistance. Share your location and describe your vehicle issue.</p>
-                </div>
-                <div class="step reveal">
-                    <div class="step-number">2</div>
-                    <h3>Get Matched</h3>
-                    <p>Our system automatically matches you with the nearest available service vehicle and qualified technician.</p>
-                </div>
-                <div class="step reveal">
-                    <div class="step-number">3</div>
-                    <h3>Track Arrival</h3>
-                    <p>Monitor your service vehicle's real-time location and estimated arrival time through our tracking system.</p>
-                </div>
-                <div class="step reveal">
-                    <div class="step-number">4</div>
-                    <h3>Receive Service</h3>
-                    <p>Get professional charging or mechanical support at your location. Pay securely through our platform.</p>
+                
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                    <h3>Predictive Analytics</h3>
+                    <p>Machine learning algorithms predict potential issues before they occur, offering preventive solutions and optimal charging schedules.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="wave"></div>
-
-    <!-- Services Section -->
-    <section id="services" class="services parallax">
+    <!-- Revolutionary Services Section -->
+    <section id="services" class="section" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));">
         <div class="container">
-            <h2 class="section-title reveal">Our Services</h2>
+            <h2 class="section-title reveal">Premium Service Suite</h2>
+            <p class="section-subtitle reveal">Comprehensive solutions for every EV owner</p>
+            
             <div class="services-grid">
-                <div class="service-card tilt-card reveal">
-                    <div class="service-image"><i class="fas fa-charging-station"></i></div>
+                <div class="service-card reveal">
+                    <div class="service-image">
+                        <i class="fas fa-charging-station"></i>
+                    </div>
                     <div class="service-content">
-                        <h3>Mobile EV Charging</h3>
-                        <p>Fast charging solutions delivered to your location with portable charging units capable of charging most EV models.</p>
-                        <ul style="margin-top: 1rem; padding-left: 1.5rem;">
-                            <li>50kW+ fast charging capability</li>
-                            <li>Compatible with all major EV brands</li>
-                            <li>Emergency roadside charging</li>
+                        <h3>Quantum Charging Network</h3>
+                        <p>Revolutionary mobile charging technology with quantum-enhanced energy transfer and ultra-rapid charging capabilities for all EV models.</p>
+                        <ul>
+                            <li>300kW+ ultra-fast charging</li>
+                            <li>Universal compatibility system</li>
+                            <li>Solar-powered mobile units</li>
+                            <li>Wireless charging capability</li>
                         </ul>
                     </div>
                 </div>
-                <div class="service-card tilt-card reveal">
-                    <div class="service-image"><i class="fas fa-wrench"></i></div>
+                
+                <div class="service-card reveal">
+                    <div class="service-image">
+                        <i class="fas fa-cogs"></i>
+                    </div>
                     <div class="service-content">
-                        <h3>Mechanical Support</h3>
-                        <p>Professional technicians provide on-site repairs and maintenance for all types of vehicle issues.</p>
-                        <ul style="margin-top: 1rem; padding-left: 1.5rem;">
-                            <li>Tire replacement and repair</li>
-                            <li>Minor electrical repairs</li>
-                            <li>Diagnostic services</li>
+                        <h3>Holographic Diagnostics</h3>
+                        <p>Advanced holographic diagnostic systems with AR-powered repair guidance and real-time component analysis for precise troubleshooting.</p>
+                        <ul>
+                            <li>3D holographic vehicle scanning</li>
+                            <li>AI-powered fault detection</li>
+                            <li>Remote diagnostic capabilities</li>
+                            <li>Predictive maintenance alerts</li>
                         </ul>
                     </div>
                 </div>
-                <div class="service-card tilt-card reveal">
-                    <div class="service-image"><i class="fas fa-route"></i></div>
+                
+                <div class="service-card reveal">
+                    <div class="service-image">
+                        <i class="fas fa-satellite"></i>
+                    </div>
                     <div class="service-content">
-                        <h3>Emergency Response</h3>
-                        <p>24/7 emergency response for stranded EVs in remote areas, highways, and urban locations.</p>
-                        <ul style="margin-top: 1rem; padding-left: 1.5rem;">
-                            <li>Priority emergency dispatch</li>
-                            <li>GPS location tracking</li>
-                            <li>Real-time status updates</li>
+                        <h3>Satellite Emergency Network</h3>
+                        <p>Global satellite-connected emergency response system ensuring help reaches you anywhere on Earth with precision timing and location accuracy.</p>
+                        <ul>
+                            <li>Global satellite coverage</li>
+                            <li>Sub-meter GPS accuracy</li>
+                            <li>Emergency beacon activation</li>
+                            <li>Multi-language support</li>
                         </ul>
                     </div>
                 </div>
@@ -354,156 +1016,317 @@
         </div>
     </section>
 
-    <!-- Brands strip -->
+    <!-- Dynamic Brand Carousel -->
     <section class="brands">
         <div class="container">
-            <div class="brand-row reveal">
-                <div class="brand">TESLA</div>
-                <div class="brand">NISSAN</div>
-                <div class="brand">KIA</div>
-                <div class="brand">TATA</div>
-                <div class="brand">HYUNDAI</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <div class="container">
-            <h2 class="section-title reveal">What Users Say</h2>
-            <div class="testimonials-grid" id="testimonials">
-                <div class="testimonial reveal">
-                    <p>Super fast response. The technician arrived in 25 minutes and got me charged in no time!</p>
-                    <div class="author"><i class="fas fa-user-circle"></i> Ananya • Kochi</div>
-                </div>
-                <div class="testimonial reveal">
-                    <p>Professional service and real-time tracking gave me complete peace of mind on the highway.</p>
-                    <div class="author"><i class="fas fa-user-circle"></i> Rahul • Trivandrum</div>
-                </div>
-                <div class="testimonial reveal">
-                    <p>Easy to use and reliable. The cost was transparent and payment was smooth.</p>
-                    <div class="author"><i class="fas fa-user-circle"></i> Meera • Kottayam</div>
+            <h3 class="section-title" style="font-size: 1.5rem; margin-bottom: 2rem; opacity: 0.8;">Trusted by Leading EV Manufacturers</h3>
+            <div class="brand-slider">
+                <div class="brand-track">
+                    <div class="brand">TESLA</div>
+                    <div class="brand">RIVIAN</div>
+                    <div class="brand">LUCID</div>
+                    <div class="brand">MERCEDES EQS</div>
+                    <div class="brand">BMW iX</div>
+                    <div class="brand">AUDI e-tron</div>
+                    <div class="brand">PORSCHE TAYCAN</div>
+                    <div class="brand">TESLA</div>
+                    <div class="brand">RIVIAN</div>
+                    <div class="brand">LUCID</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="wave"></div>
-
-    <!-- Visual Stories Strips -->
-    <section class="image-strips parallax">
-        <div class="strip">
-            <div class="strip-image"><img src="assets/img/kelvin-zyteng-gurXmXXD9fI-unsplash.jpg" alt="EV Night City"></div>
-            <div class="strip-content">
-                <h3 class="reveal">Powering Every Journey</h3>
-                <p class="reveal">From urban nights to long highway rides, our mobile charging and on-road assistance keep you moving without worry.</p>
-                <div class="spacer"></div>
-            </div>
-        </div>
-        <div class="strip reverse">
-            <div class="strip-content">
-                <h3 class="reveal">Precision. Safety. Care.</h3>
-                <p class="reveal">Expert technicians and well-equipped service vehicles deliver safe and precise support at your location.</p>
-                <div class="spacer"></div>
-            </div>
-            <div class="strip-image"><img src="assets/img/marek-studzinski-JmQlTYR1MdE-unsplash.jpg" alt="Highway Support"></div>
-        </div>
-        <div class="strip">
-            <div class="strip-image"><img src="assets/img/zaptec-29DrYtc7fp8-unsplash.jpg" alt="Modern Charging"></div>
-            <div class="strip-content">
-                <h3 class="reveal">Modern Charging, Anywhere</h3>
-                <p class="reveal">Fast, reliable charging solutions designed for today’s EVs, available when and where you need them most.</p>
-                <div class="spacer"></div>
-            </div>
-        </div>
-    </section>
-
-    <div class="wave"></div>
-
-    <!-- Inspiration Gallery (uses all images) -->
-    <section class="image-gallery">
+    <!-- Inspiration Gallery -->
+    <section id="gallery" class="section" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.04), rgba(139, 92, 246, 0.04));">
         <div class="container">
             <h2 class="section-title reveal">Inspiration Gallery</h2>
-            <div class="masonry" id="gallery">
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/hyundai-motor-group-a3vDd8hzuYs-unsplash.jpg" alt="Hyundai EV"><div class="caption">Hyundai EV energy</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/chuttersnap-xJLsHl0hIik-unsplash.jpg" alt="City Charge"><div class="caption">City charge lanes</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/chargex-nIrW3S5whYI-unsplash.jpg" alt="Charger"><div class="caption">Charger in detail</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/stephen-mease-5hbzWe6ens4-unsplash.jpg" alt="EV Concept"><div class="caption">Conceptual motion</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/yrka-pictured-OWWnwU0cVnI-unsplash.jpg" alt="EV Studio"><div class="caption">Studio design lines</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/juice-YX-BmnafcJE-unsplash.jpg" alt="Juice A"><div class="caption">Charge ready</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/juice-wpYb8d1Nha4-unsplash.jpg" alt="Juice B"><div class="caption">Power flow</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/kelvin-zyteng-gurXmXXD9fI-unsplash.jpg" alt="Night Drive"><div class="caption">Night drive</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/marek-studzinski-JmQlTYR1MdE-unsplash.jpg" alt="Open Road"><div class="caption">Open road horizons</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/zaptec-29DrYtc7fp8-unsplash.jpg" alt="Zaptec"><div class="caption">Zaptec charging</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/bernd-dittrich-8G-HjG0nVI8-unsplash.jpg" alt="Workshop"><div class="caption">Workshop precision</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/mark-chan-h6CADbJ-QCk-unsplash.jpg" alt="City EV"><div class="caption">City reflections</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/rick-govic-rLTjEVGXNBA-unsplash.jpg" alt="EV Detail"><div class="caption">Detail and design</div></div>
-                <div class="masonry-item reveal"><img loading="lazy" src="assets/img/christopher-lee-u6ey4gn_10M-unsplash.jpg" alt="EV Landscape"><div class="caption">Landscape charge</div></div>
+            <p class="section-subtitle reveal">Real shots that celebrate EV design, charging and the open road</p>
+            <div class="gallery-grid">
+                <?php foreach ($galleryImages as $img): ?>
+                <div class="gallery-item reveal"><img loading="lazy" src="<?php echo htmlspecialchars($img, ENT_QUOTES); ?>" alt="Gallery image"></div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <div class="wave"></div>
-
-    <!-- Wide Feature Banner using remaining images -->
-    <section class="parallax" style="padding: 0;">
-        <div style="position:relative; height: 60vh; overflow:hidden;">
-            <img src="assets/img/rick-govic-rLTjEVGXNBA-unsplash.jpg" alt="Design Lines" style="width:100%; height:100%; object-fit:cover; filter: saturate(1.05);">
-        </div>
-        <div style="position:relative; height: 60vh; overflow:hidden;">
-            <img src="assets/img/mark-chan-h6CADbJ-QCk-unsplash.jpg" alt="Urban EV" style="width:100%; height:100%; object-fit:cover;">
-        </div>
-        <div style="position:relative; height: 60vh; overflow:hidden;">
-            <img src="assets/img/bernd-dittrich-8G-HjG0nVI8-unsplash.jpg" alt="Service Care" style="width:100%; height:100%; object-fit:cover;">
-        </div>
-        <div style="position:relative; height: 60vh; overflow:hidden;">
-            <img src="assets/img/christopher-lee-u6ey4gn_10M-unsplash.jpg" alt="Road View" style="width:100%; height:100%; object-fit:cover;">
+    <!-- Enhanced Testimonials -->
+    <section id="testimonials" class="section">
+        <div class="container">
+            <h2 class="section-title reveal">Success Stories</h2>
+            <p class="section-subtitle reveal">Real experiences from satisfied customers</p>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial reveal">
+                    <p>The AI-powered charging system arrived in just 12 minutes and had my Tesla at 80% charge in under 15 minutes. Absolutely revolutionary technology!</p>
+                    <div class="author">
+                        <i class="fas fa-user-astronaut"></i>
+                        <span>Alex Chen • Tech Entrepreneur • San Francisco</span>
+                    </div>
+                </div>
+                
+                <div class="testimonial reveal">
+                    <p>Stranded at midnight on a remote highway, their satellite emergency system located me instantly and dispatched help. The holographic diagnostics were mind-blowing!</p>
+                    <div class="author">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Sarah Johnson • Business Executive • Austin</span>
+                    </div>
+                </div>
+                
+                <div class="testimonial reveal">
+                    <p>The AR interface showed me exactly what was wrong with my vehicle. The technician fixed the issue remotely while I watched through the app. Future is here!</p>
+                    <div class="author">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Dr. Michael Rodriguez • Research Scientist • Boston</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <div id="toTop"><i class="fas fa-arrow-up"></i></div>
+    <!-- Floating Action Button -->
+    <div id="toTop">
+        <i class="fas fa-rocket"></i>
+    </div>
 
+    <!-- Futuristic Footer -->
     <footer class="footer">
         <div class="footer-content">
             <h3>EV Mobile Power & Service Station</h3>
-            <p>Smart support for stranded electric vehicles</p>
+            <p>Pioneering the future of electric vehicle support with cutting-edge technology and unmatched service excellence.</p>
+            
             <div class="social-links">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
             </div>
-            <p>&copy; 2024 EV Mobile Station. All rights reserved.</p>
+            
+            <p style="margin-top: 2rem; opacity: 0.6;">&copy; 2024 EV Mobile Station. Revolutionizing mobility, one charge at a time.</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Enhanced Loading Animation
+        window.addEventListener('load', function() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            setTimeout(() => {
+                loadingOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
+
+        // Advanced Smooth Scrolling with Easing
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
                 if (href.length > 1) {
-                e.preventDefault();
+                    e.preventDefault();
                     const target = document.querySelector(href);
-                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (target) {
+                        const headerHeight = document.querySelector('.header').offsetHeight;
+                        const targetPosition = target.offsetTop - headerHeight - 20;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
                 }
             });
         });
+
+        // Advanced Header Scroll Effect
         const header = document.getElementById('header');
-        window.addEventListener('scroll', function() { if (window.scrollY > 80) header.classList.add('scrolled'); else header.classList.remove('scrolled'); });
+        let lastScrollTop = 0;
+        
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Hide header on scroll down, show on scroll up
+            if (scrollTop > lastScrollTop && scrollTop > 200) {
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                header.style.transform = 'translateY(0)';
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Enhanced Intersection Observer with Stagger
         const reveals = document.querySelectorAll('.reveal');
-        const io = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); } }); }, { threshold: 0.12 });
-        reveals.forEach(el => io.observe(el));
-        const parallaxes = document.querySelectorAll('.parallax');
-        window.addEventListener('scroll', () => { const sc = window.pageYOffset; parallaxes.forEach(el => { el.style.backgroundPositionY = `${-sc * 0.15}px`; }); });
-        function handleTilt(e){ const card = e.currentTarget; const rect = card.getBoundingClientRect(); const cx = rect.left + rect.width/2; const cy = rect.top + rect.height/2; const dx = (e.clientX - cx) / (rect.width/2); const dy = (e.clientY - cy) / (rect.height/2); const max = 8; card.style.transform = `rotateX(${(-dy*max).toFixed(2)}deg) rotateY(${(dx*max).toFixed(2)}deg) translateY(-6px)`; card.style.boxShadow = `${-dx*12}px ${dy*12}px 24px rgba(0,0,0,0.18)`; }
-        function resetTilt(e){ const card = e.currentTarget; card.style.transform = 'translateY(-6px) rotateX(0) rotateY(0)'; card.style.boxShadow = '0 24px 48px rgba(0,0,0,0.18)'; }
-        document.querySelectorAll('.tilt-card').forEach(card => { card.addEventListener('mousemove', handleTilt); card.addEventListener('mouseleave', resetTilt); });
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('in');
+                    }, index * 100);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        reveals.forEach(el => revealObserver.observe(el));
+
+        // Advanced 3D Tilt Effect for Cards
+        function handle3DTilt(e) {
+            const card = e.currentTarget;
+            const rect = card.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const deltaX = (e.clientX - centerX) / (rect.width / 2);
+            const deltaY = (e.clientY - centerY) / (rect.height / 2);
+            
+            const rotateX = deltaY * -10;
+            const rotateY = deltaX * 10;
+            
+            card.style.transform = `
+                perspective(1000px) 
+                rotateX(${rotateX}deg) 
+                rotateY(${rotateY}deg) 
+                translateZ(20px)
+                scale3d(1.05, 1.05, 1.05)
+            `;
+            
+            card.style.boxShadow = `
+                ${-deltaX * 25}px ${-deltaY * 25}px 50px rgba(0,0,0,0.3),
+                0 0 80px rgba(6, 214, 160, 0.2)
+            `;
+        }
+
+        function reset3DTilt(e) {
+            const card = e.currentTarget;
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0) scale3d(1, 1, 1)';
+            card.style.boxShadow = '0 20px 40px rgba(0,0,0,0.2)';
+        }
+
+        // Apply 3D tilt to cards
+        document.querySelectorAll('.feature-card, .service-card').forEach(card => {
+            card.addEventListener('mousemove', handle3DTilt);
+            card.addEventListener('mouseleave', reset3DTilt);
+        });
+
+        // Enhanced Back to Top with Rocket Animation
         const toTop = document.getElementById('toTop');
-        window.addEventListener('scroll', () => { if (window.scrollY > 450) toTop.classList.add('show'); else toTop.classList.remove('show'); });
-        toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-        const heroCarousel = document.getElementById('heroCarousel');
-        if (heroCarousel) { const c = new bootstrap.Carousel(heroCarousel, { interval: 5000, ride: 'carousel', pause: false }); }
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                toTop.classList.add('show');
+            } else {
+                toTop.classList.remove('show');
+            }
+        });
+
+        toTop.addEventListener('click', () => {
+            // Add rocket launch animation
+            toTop.style.transform = 'translateY(-200px) scale(0.5)';
+            toTop.style.opacity = '0';
+            
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            setTimeout(() => {
+                toTop.style.transform = 'translateY(-8px) scale(1)';
+                toTop.style.opacity = '1';
+            }, 1000);
+        });
+
+        // Dynamic Particle System (optional enhancement)
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: fixed;
+                width: 2px;
+                height: 2px;
+                background: #06d6a0;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: -1;
+                opacity: 0.7;
+            `;
+            
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            
+            document.body.appendChild(particle);
+            
+            const duration = Math.random() * 3000 + 2000;
+            const dx = (Math.random() - 0.5) * 100;
+            const dy = -Math.random() * 100 - 50;
+            
+            particle.animate([
+                { transform: 'translate(0, 0)', opacity: 0.7 },
+                { transform: `translate(${dx}px, ${dy}px)`, opacity: 0 }
+            ], {
+                duration: duration,
+                easing: 'ease-out'
+            }).addEventListener('finish', () => {
+                particle.remove();
+            });
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 500);
+
+        // Advanced Brand Slider Pause on Hover
+        const brandTrack = document.querySelector('.brand-track');
+        if (brandTrack) {
+            brandTrack.addEventListener('mouseenter', () => {
+                brandTrack.style.animationPlayState = 'paused';
+            });
+            
+            brandTrack.addEventListener('mouseleave', () => {
+                brandTrack.style.animationPlayState = 'running';
+            });
+        }
+
+        // Parallax Effect for Background Elements
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.hero-3d-bg, .floating-elements');
+            
+            parallaxElements.forEach(element => {
+                const speed = element.classList.contains('hero-3d-bg') ? 0.5 : 0.3;
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Add CSS classes for enhanced interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to interactive elements
+            const interactiveElements = document.querySelectorAll('.btn, .feature-card, .service-card, .testimonial');
+            interactiveElements.forEach(element => {
+                element.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+        });
+
+        // Keyboard navigation enhancement
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Close any open modals or overlays
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
+        console.log('🚀 EV Mobile Station - Advanced UI Loaded Successfully!');
     </script>
 </body>
-</html> 
+</html>
