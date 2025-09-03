@@ -473,7 +473,7 @@
                 <a href="#"><i class="fab fa-instagram"></i></a>
                 <a href="#"><i class="fab fa-linkedin"></i></a>
             </div>
-            <p>&copy; 2024 EV Mobile Station. All rights reserved.</p>
+            <p>&copy; 2025 EV Mobile Station. All rights reserved.</p>
         </div>
     </footer>
 

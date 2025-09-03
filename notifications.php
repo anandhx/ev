@@ -31,8 +31,8 @@ $notifications = [
         'id' => 1,
         'type' => 'service_update',
         'title' => 'Service Request Updated',
-        'message' => 'Your service request #SR-2024-001 has been assigned to technician John Smith.',
-        'timestamp' => '2024-01-15 14:30:00',
+        'message' => 'Your service request #SR-2025-001 has been assigned to technician John Smith.',
+        'timestamp' => '2025-01-15 14:30:00',
         'is_read' => false,
         'priority' => 'high'
     ],
@@ -40,8 +40,8 @@ $notifications = [
         'id' => 2,
         'type' => 'payment',
         'title' => 'Payment Received',
-        'message' => 'Payment of $150.00 for service request #SR-2024-001 has been received successfully.',
-        'timestamp' => '2024-01-15 12:15:00',
+        'message' => 'Payment of $150.00 for service request #SR-2025-001 has been received successfully.',
+        'timestamp' => '2025-01-15 12:15:00',
         'is_read' => true,
         'priority' => 'medium'
     ],
@@ -50,7 +50,7 @@ $notifications = [
         'type' => 'service_complete',
         'title' => 'Service Completed',
         'message' => 'Your service request #SR-2023-012 has been completed. Please rate your experience.',
-        'timestamp' => '2024-01-14 16:45:00',
+        'timestamp' => '2025-01-14 16:45:00',
         'is_read' => false,
         'priority' => 'high'
     ],
@@ -59,7 +59,7 @@ $notifications = [
         'type' => 'promotion',
         'title' => 'Special Offer',
         'message' => 'Get 20% off on your next service request. Use code: SAVE20',
-        'timestamp' => '2024-01-14 10:00:00',
+        'timestamp' => '2025-01-14 10:00:00',
         'is_read' => true,
         'priority' => 'low'
     ],
@@ -67,8 +67,8 @@ $notifications = [
         'id' => 5,
         'type' => 'system',
         'title' => 'System Maintenance',
-        'message' => 'Scheduled maintenance on January 20th, 2024 from 2:00 AM to 4:00 AM.',
-        'timestamp' => '2024-01-13 09:30:00',
+        'message' => 'Scheduled maintenance on January 20th, 2025 from 2:00 AM to 4:00 AM.',
+        'timestamp' => '2025-01-13 09:30:00',
         'is_read' => true,
         'priority' => 'medium'
     ],
@@ -77,7 +77,7 @@ $notifications = [
         'type' => 'service_update',
         'title' => 'Technician En Route',
         'message' => 'Technician Mike Johnson is on the way to your location. ETA: 15 minutes.',
-        'timestamp' => '2024-01-12 15:20:00',
+        'timestamp' => '2025-01-12 15:20:00',
         'is_read' => false,
         'priority' => 'high'
     ],
@@ -86,7 +86,7 @@ $notifications = [
         'type' => 'payment',
         'title' => 'Payment Pending',
         'message' => 'Payment of $200.00 for service request #SR-2023-015 is pending. Please complete payment.',
-        'timestamp' => '2024-01-12 11:45:00',
+        'timestamp' => '2025-01-12 11:45:00',
         'is_read' => true,
         'priority' => 'medium'
     ],
@@ -95,7 +95,7 @@ $notifications = [
         'type' => 'promotion',
         'title' => 'New Service Available',
         'message' => 'We now offer 24/7 emergency roadside assistance. Call us anytime!',
-        'timestamp' => '2024-01-11 14:15:00',
+        'timestamp' => '2025-01-11 14:15:00',
         'is_read' => true,
         'priority' => 'low'
     ]

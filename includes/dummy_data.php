@@ -43,7 +43,7 @@ function get_user_requests($user_id, $limit = 10) {
             'status' => 'completed',
             'total_cost' => 75.00,
             'payment_status' => 'paid',
-            'created_at' => '2024-01-15 10:30:00',
+            'created_at' => '2025-01-15 10:30:00',
             'vehicle_number' => 'EV-CHG-001',
             'technician_name' => 'John Smith'
         ],
@@ -55,7 +55,7 @@ function get_user_requests($user_id, $limit = 10) {
             'status' => 'in_progress',
             'total_cost' => 120.00,
             'payment_status' => 'pending',
-            'created_at' => '2024-01-20 14:00:00',
+            'created_at' => '2025-01-20 14:00:00',
             'vehicle_number' => 'EV-MECH-001',
             'technician_name' => 'Mike Johnson'
         ],
@@ -67,7 +67,7 @@ function get_user_requests($user_id, $limit = 10) {
             'status' => 'assigned',
             'total_cost' => 95.00,
             'payment_status' => 'pending',
-            'created_at' => '2024-01-18 09:00:00',
+            'created_at' => '2025-01-18 09:00:00',
             'vehicle_number' => 'EV-HYB-001',
             'technician_name' => 'Sarah Wilson'
         ]
@@ -139,7 +139,7 @@ function get_all_service_requests($status = null, $limit = 50) {
             'status' => 'completed',
             'total_cost' => 75.00,
             'payment_status' => 'paid',
-            'created_at' => '2024-01-15 10:30:00',
+            'created_at' => '2025-01-15 10:30:00',
             'vehicle_number' => 'EV-CHG-001',
             'technician_name' => 'John Smith'
         ],
@@ -153,7 +153,7 @@ function get_all_service_requests($status = null, $limit = 50) {
             'status' => 'in_progress',
             'total_cost' => 120.00,
             'payment_status' => 'pending',
-            'created_at' => '2024-01-20 14:00:00',
+            'created_at' => '2025-01-20 14:00:00',
             'vehicle_number' => 'EV-MECH-001',
             'technician_name' => 'Mike Johnson'
         ],
@@ -167,7 +167,7 @@ function get_all_service_requests($status = null, $limit = 50) {
             'status' => 'assigned',
             'total_cost' => 95.00,
             'payment_status' => 'pending',
-            'created_at' => '2024-01-18 09:00:00',
+            'created_at' => '2025-01-18 09:00:00',
             'vehicle_number' => 'EV-HYB-001',
             'technician_name' => 'Sarah Wilson'
         ],
@@ -181,7 +181,7 @@ function get_all_service_requests($status = null, $limit = 50) {
             'status' => 'completed',
             'total_cost' => 60.00,
             'payment_status' => 'paid',
-            'created_at' => '2024-01-12 16:30:00',
+            'created_at' => '2025-01-12 16:30:00',
             'vehicle_number' => 'EV-CHG-002',
             'technician_name' => 'David Lee'
         ],
@@ -195,7 +195,7 @@ function get_all_service_requests($status = null, $limit = 50) {
             'status' => 'pending',
             'total_cost' => 80.00,
             'payment_status' => 'pending',
-            'created_at' => '2024-01-22 11:00:00',
+            'created_at' => '2025-01-22 11:00:00',
             'vehicle_number' => null,
             'technician_name' => null
         ]
@@ -227,7 +227,7 @@ function get_dummy_users() {
             'vehicle_plate' => 'ABC-123',
             'status' => 'active',
             'membership' => 'premium',
-            'created_at' => '2024-01-01 10:00:00'
+            'created_at' => '2025-01-01 10:00:00'
         ],
         [
             'id' => 2,
@@ -239,7 +239,7 @@ function get_dummy_users() {
             'vehicle_plate' => 'XYZ-789',
             'status' => 'active',
             'membership' => 'standard',
-            'created_at' => '2024-01-02 11:30:00'
+            'created_at' => '2025-01-02 11:30:00'
         ],
         [
             'id' => 3,
@@ -251,7 +251,7 @@ function get_dummy_users() {
             'vehicle_plate' => 'DEF-456',
             'status' => 'active',
             'membership' => 'premium',
-            'created_at' => '2024-01-03 14:15:00'
+            'created_at' => '2025-01-03 14:15:00'
         ],
         [
             'id' => 4,
@@ -263,7 +263,7 @@ function get_dummy_users() {
             'vehicle_plate' => 'GHI-789',
             'status' => 'suspended',
             'membership' => 'standard',
-            'created_at' => '2024-01-04 09:45:00'
+            'created_at' => '2025-01-04 09:45:00'
         ],
         [
             'id' => 5,
@@ -275,7 +275,7 @@ function get_dummy_users() {
             'vehicle_plate' => 'JKL-012',
             'status' => 'active',
             'membership' => 'premium',
-            'created_at' => '2024-01-05 16:20:00'
+            'created_at' => '2025-01-05 16:20:00'
         ]
     ];
 }

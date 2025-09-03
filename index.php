@@ -1103,7 +1103,7 @@ shuffle($galleryImages);
                 <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
             </div>
             
-            <p style="margin-top: 2rem; opacity: 0.6;">&copy; 2024 EV Mobile Station. Revolutionizing mobility, one charge at a time.</p>
+            <p style="margin-top: 2rem; opacity: 0.6;">&copy; 2025 EV Mobile Station. Revolutionizing mobility, one charge at a time.</p>
         </div>
     </footer>
 
