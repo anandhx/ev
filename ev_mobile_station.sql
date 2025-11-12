@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2025 at 10:38 AM
+-- Generation Time: Nov 12, 2025 at 06:32 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -240,7 +240,8 @@ CREATE TABLE `spare_orders` (
 INSERT INTO `spare_orders` (`id`, `request_id`, `user_id`, `total_amount`, `shipping_name`, `shipping_phone`, `shipping_address`, `shipping_city`, `shipping_state`, `shipping_postal`, `status`, `created_at`, `updated_at`) VALUES
 (1, 2, 4, 0.01, 'sd', 'sdg', 'sdg', 'asdg', 'sdg', 'asdg', 'delivered', '2025-09-03 08:21:22', '2025-09-03 08:29:50'),
 (2, 2, 4, 0.01, 'dassdaf', 'sdaf', 'sdaf', 'sdaf', 'sdaf', 'sdfa', 'pending', '2025-09-03 08:30:43', '2025-09-03 08:30:43'),
-(3, 2, 4, 0.01, 'dassdaf', 'sdaf', 'sdaf', 'sdaf', 'sdaf', 'sdfa', 'pending', '2025-09-03 08:34:37', '2025-09-03 08:34:37');
+(3, 2, 4, 0.01, 'dassdaf', 'sdaf', 'sdaf', 'sdaf', 'sdaf', 'sdfa', 'pending', '2025-09-03 08:34:37', '2025-09-03 08:34:37'),
+(4, 3, 4, 3245.00, 'fdhhdfh', '4564364564', 'rdsfgfgdfsg', 'fgfgdsfgfds', 'gdfgssdfsf', '344444', 'pending', '2025-09-03 08:50:29', '2025-09-03 08:50:29');
 
 -- --------------------------------------------------------
 
@@ -359,7 +360,8 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `full_name`, `phone`
 (2, 'jane_smith', 'jane@example.com', '$2y$10$U6eF7cJueOP88oox6IERxOc2K7O8CBixFP6RlVG/8ATUHj.dkKrwq', 'Jane Smith', '+1-555-0202', 'Nissan Leaf', 'XYZ-789', '2025-09-02 12:31:29', '2025-09-02 12:31:29'),
 (3, 'anandhu', 'anandhuashok6959@gmail.com', '$2y$10$WlW87fg5UWt0pgk1mRYhb.vbJJ63.lDEw2JXvOI/sK3opkpWi.TXy', 'anandhu ask', '954-410-6241', 'swift', 'kl 05 ag 3743', '2025-09-02 12:39:51', '2025-09-02 12:39:51'),
 (4, 'anandhuo', 'anandhuashok6959o@gmail.com', '$2y$10$QVpe82V8UzZ2kVR.Rl5xNebTgth8KewCg/39wdld1R5klFT8cJZH6', 'anandhu o', '9544106241', 'swift', 'kl 05 ag 0000', '2025-09-02 12:49:05', '2025-09-02 12:49:05'),
-(5, 'bobduk', 'anandhsdsduashok6959o@gmail.com', '$2y$10$WvN2ODCbi3mokImS5x0T/.ByOtFdc7kfCvFzSbuuT5ZnuVDrF35wO', 'bob2', '9544106242', 'swift', '', '2025-09-02 14:34:46', '2025-09-02 15:02:27');
+(5, 'bobduk', 'anandhsdsduashok6959o@gmail.com', '$2y$10$WvN2ODCbi3mokImS5x0T/.ByOtFdc7kfCvFzSbuuT5ZnuVDrF35wO', 'bob2', '9544106242', 'swift', '', '2025-09-02 14:34:46', '2025-09-02 15:02:27'),
+(6, 'anandhuq2', 'archanaashok417@gmail.com', '$2y$10$uF5/qzcc64uRUpoLNOHPpuinFopNLTvpTsRzjZRMMHYIT.8.A1p/O', 'asw', '7592046959', 'fgj', 'dfgh', '2025-11-12 05:29:11', '2025-11-12 05:29:11');
 
 -- --------------------------------------------------------
 
@@ -387,7 +389,8 @@ INSERT INTO `user_vehicles` (`id`, `user_id`, `make`, `model`, `plate`, `vin`, `
 (1, 5, 'swift', 'swift', 'kl 05 ag 36664', '', '', 1, '2025-09-02 14:34:46'),
 (2, 5, 'swift', 'swift', 'kl 05 a 43748', '3', '', 0, '2025-09-02 14:37:23'),
 (3, 5, 'TESla', '3', 'kl 05 ag 3333', '32', 'red', 0, '2025-09-02 14:45:33'),
-(4, 4, 'maruthi', '3', 'kl 05 aj 4747', '45', 'red', 1, '2025-09-03 06:43:53');
+(4, 4, 'maruthi', '3', 'kl 05 aj 4747', '45', 'red', 1, '2025-09-03 06:43:53'),
+(5, 6, 'fgj', 'fgj', 'dfgh', NULL, NULL, 1, '2025-11-12 05:29:11');
 
 --
 -- Indexes for dumped tables
@@ -541,7 +544,7 @@ ALTER TABLE `service_vehicles`
 -- AUTO_INCREMENT for table `spare_orders`
 --
 ALTER TABLE `spare_orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `spare_part_requests`
@@ -565,13 +568,13 @@ ALTER TABLE `technicians`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `user_vehicles`
 --
 ALTER TABLE `user_vehicles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
